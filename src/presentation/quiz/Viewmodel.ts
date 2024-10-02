@@ -1,18 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IQuizQuestionBool, IQuizQuestionDefault, IQuizQuestionMultiple } from '../../domain/IQuestions';
 import { IQuestionService } from '../../domain/services/IQuizService';
 
 export const QuestionViewModel = (questionService: IQuestionService) => {
   const [quizQuestions, setQuizQuestions] = useState<(IQuizQuestionMultiple | IQuizQuestionDefault | IQuizQuestionBool)[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [answers, setAnswers] = useState<string[]>([]); // Store the answers for each question
-
-  useEffect(() => {
-    loadQuizQuestions();
-  }, []);
 
   const loadQuizQuestions = async () => {
     setLoading(true);
@@ -20,8 +16,8 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
     try {
       const questions = await questionService.loadQuizQuestions();
       setQuizQuestions(questions);
-      setCurrentQuestionIndex(0); // Start with the first question
-      setAnswers(new Array(questions.length).fill(null)); // Initialize answers array
+      setCurrentQuestionIndex(0); 
+      setAnswers([]);
     } catch (err) {
       setError("Failed to load quiz questions.");
       console.error(err);
@@ -47,10 +43,13 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
     setSelectedOption(event.target.value);
   };
 
-  // Handle dot click to navigate to a previous question
   const handleDotClick = (index: number) => {
-    setSelectedOption(answers[index]); // Set the selected option based on saved answers
-    setCurrentQuestionIndex(index); // Move to the clicked question
+    console.log(index)
+    console.log(answers.length)
+    if (index <= answers.length) {
+      setSelectedOption(answers[index]);
+      setCurrentQuestionIndex(index); 
+    }
   };
 
   return {

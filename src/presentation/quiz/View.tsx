@@ -11,7 +11,6 @@ import QuizQuestionDefault from './Components/QuizQuestionDefault';
 import QuizQuestionMultiple from './Components/QuizQuestionMultiple';
 import { IQuizQuestionBool, IQuizQuestionMultiple } from '../../domain/IQuestions';
 
-
 const QuizView: React.FC = () => {
   const quizRepository: IQuestionRepository = QuizRepository(QuizLocalDataSource);
   const questionService = QuestionService(quizRepository);
@@ -21,6 +20,7 @@ const QuizView: React.FC = () => {
     error, 
     currentQuestionIndex, 
     selectedOption, 
+    answers,
     nextQuestion, 
     handleOptionChange, 
     handleDotClick, 
@@ -41,49 +41,52 @@ const QuizView: React.FC = () => {
           Start Quiz
         </Button>
       ) : (
-        <Paper elevation={3} style={{ padding: '16px', marginTop: '16px', width: '700px', height: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'start' }}>
-          {quizQuestions.length > 0 && currentQuestionIndex !== null && (
-            <motion.div
-              key={currentQuestionIndex}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -100, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}
-            >
-              <Typography variant="h6" style={{ textAlign: 'left' }}>
-                <strong>Question {currentQuestionIndex + 1}:</strong> {quizQuestions[currentQuestionIndex].question}
-              </Typography>
-              <Typography variant="subtitle1" style={{ textAlign: 'left' }}>
-                <strong>Category:</strong> {quizQuestions[currentQuestionIndex].category}
-              </Typography>
-              <Typography variant="subtitle1" style={{ textAlign: 'left' }}>
-                <strong>Difficulty:</strong> {quizQuestions[currentQuestionIndex].difficulty}
-              </Typography>
-              {quizQuestions[currentQuestionIndex].type === 'multiple' && 
-                <QuizQuestionMultiple 
-                  question={quizQuestions[currentQuestionIndex] as IQuizQuestionMultiple} 
-                  selectedOption={selectedOption} 
-                  onOptionChange={handleOptionChange} 
-                />}
-               {quizQuestions[currentQuestionIndex].type === 'boolean' && 
-                <QuizQuestionBool 
-                  question={quizQuestions[currentQuestionIndex] as IQuizQuestionBool} 
-                  selectedOption={selectedOption} 
-                  onOptionChange={handleOptionChange} 
-                />}
-              {quizQuestions[currentQuestionIndex].type === 'text' && 
-                <QuizQuestionDefault 
-                  question={quizQuestions[currentQuestionIndex]} 
-                  selectedOption={selectedOption} 
-                  onOptionChange={handleOptionChange} 
-                />
-              }
-            </motion.div>
-          )}
-          <Button variant="contained" color="primary" onClick={nextQuestion} style={{ marginTop: '16px', alignSelf: 'flex-end' }}>
-            Next Question
-          </Button>
+        <>
+        <Typography variant="h6" style={{ textAlign: 'left' }}>
+            <strong>Question {currentQuestionIndex + 1}/{quizQuestions.length}</strong>
+          </Typography>
+          <Paper elevation={3} style={{ padding: '16px', marginTop: '16px', width: '700px', height: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'start' }}>
+            {quizQuestions.length > 0 && currentQuestionIndex !== null && (
+              <motion.div
+                key={currentQuestionIndex}
+                initial={{ x: 100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}
+              >
+                <Typography variant="h6" style={{ textAlign: 'left' }}>
+                  {quizQuestions[currentQuestionIndex].question}
+                </Typography>
+                <Typography variant="subtitle1" style={{ textAlign: 'left' }}>
+                  <strong>Category:</strong> {quizQuestions[currentQuestionIndex].category}
+                </Typography>
+                <Typography variant="subtitle1" style={{ textAlign: 'left' }}>
+                  <strong>Difficulty:</strong> {quizQuestions[currentQuestionIndex].difficulty}
+                </Typography>
+                {quizQuestions[currentQuestionIndex].type === 'multiple' && 
+                  <QuizQuestionMultiple 
+                    question={quizQuestions[currentQuestionIndex] as IQuizQuestionMultiple} 
+                    selectedOption={selectedOption} 
+                    onOptionChange={handleOptionChange} 
+                  />}
+                 {quizQuestions[currentQuestionIndex].type === 'boolean' && 
+                  <QuizQuestionBool 
+                    selectedOption={selectedOption} 
+                    onOptionChange={handleOptionChange} 
+                  />}
+                {quizQuestions[currentQuestionIndex].type === 'text' && 
+                  <QuizQuestionDefault 
+                    selectedOption={selectedOption} 
+                    onOptionChange={handleOptionChange} 
+                  />
+                }
+              </motion.div>
+            )}
+            <Button variant="contained" color="primary" onClick={nextQuestion} style={{ marginTop: '16px', alignSelf: 'flex-end' }} disabled={selectedOption == null}>
+              Next Question
+            </Button>
+          </Paper>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
             {quizQuestions.map((_, index) => (
@@ -94,14 +97,14 @@ const QuizView: React.FC = () => {
                   height: '10px', 
                   width: '10px', 
                   borderRadius: '50%', 
-                  backgroundColor: index < currentQuestionIndex ? 'grey' : (index === currentQuestionIndex ? 'white' : 'lightgrey'),
+                  backgroundColor: index < currentQuestionIndex ? 'grey' : (index === currentQuestionIndex ? '#2596be' : 'lightgrey'),
                   margin: '0 5px',
-                  cursor: 'pointer'
+                  cursor: index <= answers.length ? 'pointer' : 'not-allowed'
                 }} 
               />
             ))}
           </div>
-        </Paper>
+        </>
       )}
     </div>
   );

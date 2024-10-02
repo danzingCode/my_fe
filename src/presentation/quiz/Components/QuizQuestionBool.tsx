@@ -1,17 +1,14 @@
 import React from 'react';
-import { RadioGroup, FormControlLabel, Radio, Typography } from '@mui/material';
-import { IQuizQuestionBool } from '../../../domain/IQuestions';
+import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 interface QuizQuestionBoolProps {
-  question: IQuizQuestionBool;
   selectedOption: string | null;
   onOptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const QuizQuestionBool: React.FC<QuizQuestionBoolProps> = ({ question, selectedOption, onOptionChange }) => {
+const QuizQuestionBool: React.FC<QuizQuestionBoolProps> = ({ selectedOption, onOptionChange }) => {
   return (
     <div style={{ marginTop: '16px', width: '100%' }}>
-      <Typography variant="h6">{question.question}</Typography>
       <RadioGroup 
         value={selectedOption || ''} 
         onChange={onOptionChange} 
