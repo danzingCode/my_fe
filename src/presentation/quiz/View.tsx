@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import QuizQuestionBool from './Components/QuizQuestionBool';
 import QuizQuestionDefault from './Components/QuizQuestionDefault';
 import QuizQuestionMultiple from './Components/QuizQuestionMultiple';
+import { IQuizQuestionBool, IQuizQuestionMultiple } from '../../domain/IQuestions';
 
 
 const QuizView: React.FC = () => {
@@ -61,13 +62,13 @@ const QuizView: React.FC = () => {
               </Typography>
               {quizQuestions[currentQuestionIndex].type === 'multiple' && 
                 <QuizQuestionMultiple 
-                  question={quizQuestions[currentQuestionIndex]} 
+                  question={quizQuestions[currentQuestionIndex] as IQuizQuestionMultiple} 
                   selectedOption={selectedOption} 
                   onOptionChange={handleOptionChange} 
                 />}
                {quizQuestions[currentQuestionIndex].type === 'boolean' && 
                 <QuizQuestionBool 
-                  question={quizQuestions[currentQuestionIndex]} 
+                  question={quizQuestions[currentQuestionIndex] as IQuizQuestionBool} 
                   selectedOption={selectedOption} 
                   onOptionChange={handleOptionChange} 
                 />}
