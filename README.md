@@ -44,4 +44,30 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
 # my_fe
+
+# Custom Application Architecture
+
+## Overview
+
+This application is built using the MVVM (Model-View-ViewModel) approach, enhancing testability and maintainability through dependency injection and separation of concerns.
+
+### Architecture Details
+
+- **MVVM Approach**:
+  - Promotes a clear structure for handling UI logic and data management.
+- **Dependency Injection**:
+  - Facilitates easier testing and development by decoupling components.
+- **Separation of Concerns through Domain-Driven Design (DDD)**:
+  - **Data Layer**: Responsible for data retrieval and storage.
+  - **Domain Layer**: Encapsulates the business logic of the application.
+  - **View Layer**: Handles the user interface (UI) presentation.
+  - **ViewModel**: Contains all the UI logic, bridging the view and the model.
+  - **View**: Focused solely on rendering the UI, with no business logic included.
+
+## Future Improvements
+
+- **Enhance Testing**: Increase the coverage and quality of unit and integration tests.
+- **Styled Components**: Refactor `quizStyles.ts` to utilize styled-components for a more streamlined styling approach.
+- **User Repository Integration**: Store user results in a `UserRepo` and update the `QuestionService` to accept both `quizRepository` and `userRepository` as dependencies.
