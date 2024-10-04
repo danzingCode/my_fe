@@ -1,5 +1,5 @@
 import { IQuizQuestionBool, IQuizQuestionDefault, IQuizQuestionMultiple } from '../IQuestions';
 
 export interface IQuestionService {
-  loadQuizQuestions: () => Promise<(IQuizQuestionMultiple | IQuizQuestionBool | IQuizQuestionDefault)[]>;
+  loadRandomQuizQuestions: () => Promise<(IQuizQuestionMultiple | IQuizQuestionBool | IQuizQuestionDefault)[]>;
 }

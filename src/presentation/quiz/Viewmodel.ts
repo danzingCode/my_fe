@@ -8,16 +8,20 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<string[]>([]); // Store the answers for each question
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [results, setResults] = useState<{ correctAnswers: number; incorrectAnswers: number; totalQuestions: number; score: number } | null>(null);
+  const [quizFinished, setQuizFinished] = useState<boolean>(false); 
 
-  const loadQuizQuestions = async () => {
+  const loadRandomQuizQuestions = async () => {
     setLoading(true);
     setError(null);
     try {
-      const questions = await questionService.loadQuizQuestions();
+      const questions = await questionService.loadRandomQuizQuestions();
       setQuizQuestions(questions);
-      setCurrentQuestionIndex(0); 
+      setCurrentQuestionIndex(0);
       setAnswers([]);
+      setResults(null);
+      setQuizFinished(false); 
     } catch (err) {
       setError("Failed to load quiz questions.");
       console.error(err);
@@ -28,15 +32,33 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
 
   const nextQuestion = () => {
     if (currentQuestionIndex !== null && currentQuestionIndex < quizQuestions.length - 1) {
-      // Save the selected option before moving to the next question
       if (selectedOption !== null) {
         const newAnswers = [...answers];
-        newAnswers[currentQuestionIndex] = selectedOption; // Save current answer
+        newAnswers[currentQuestionIndex] = selectedOption;
         setAnswers(newAnswers);
       }
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null); // Reset selected option for the new question
+      setSelectedOption(null);
     }
+  };
+
+  const finishQuiz = () => {
+    const correctAnswers = answers.filter((answer, index) => {
+      const question = quizQuestions[index];
+      return answer === question.correct_answer; 
+    }).length;
+
+    const totalQuestions = answers.length;
+    const incorrectAnswers = totalQuestions - correctAnswers;
+    const score = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+    setResults({
+      correctAnswers,
+      incorrectAnswers,
+      totalQuestions,
+      score,
+    });
+    setQuizFinished(true);
   };
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,12 +66,18 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
   };
 
   const handleDotClick = (index: number) => {
-    console.log(index)
-    console.log(answers.length)
     if (index <= answers.length) {
       setSelectedOption(answers[index]);
-      setCurrentQuestionIndex(index); 
+      setCurrentQuestionIndex(index);
     }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestionIndex(null);
+    setAnswers([]);
+    setSelectedOption(null);
+    setResults(null);
+    setQuizFinished(false); 
   };
 
   return {
@@ -58,10 +86,14 @@ export const QuestionViewModel = (questionService: IQuestionService) => {
     error,
     currentQuestionIndex,
     selectedOption,
-    nextQuestion,
-    handleOptionChange,
     answers,
-    handleDotClick, // Ensure handleDotClick is included
-    loadQuizQuestions
+    results,
+    quizFinished, 
+    nextQuestion,
+    finishQuiz,
+    resetQuiz,
+    handleOptionChange,
+    handleDotClick,
+    loadRandomQuizQuestions
   };
 };

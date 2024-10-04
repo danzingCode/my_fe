@@ -1,0 +1,76 @@
+export const quizStyles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    width: '100%',
+    minWidth: '320px',
+    maxWidth: '800px',
+    margin: '0 auto',
+    height: '100vh',
+    overflow: 'hidden',
+    '@media (max-width: 600px)': {
+      padding: '10px',
+      height: '100vh',
+      width: '95vw', // Set width to 95vw on mobile
+    },
+  },
+  paper: {
+    padding: '20px',
+    marginTop: '16px',
+    width: '100%',
+    minHeight: '400px',
+    minWidth: '100%',
+    maxWidth: '700px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'start',
+    '@media (max-width: 600px)': {
+      margin: '20px',
+      padding: '20px',
+      minHeight: '400px',
+      width: '95vw', // Set width to 95vw on mobile
+    },
+  },
+  questionContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  nextButton: {
+    width: '200px', 
+    height: "50px",
+    padding: '10px',
+    boxSizing: 'border-box',
+    borderRadius: '4px',
+    fontSize: '16px',
+  },
+  finishButton: {
+    height: "50px",
+    width: '200px', 
+    padding: '10px', 
+    boxSizing: 'border-box', 
+    borderRadius: '4px', 
+    fontSize: '16px',
+  },
+  indicatorContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '16px',
+    width: '100%',
+    flexWrap: 'wrap', 
+    maxWidth: '700px', 
+    '@media (min-width: 600px)': {
+      width: 'auto',
+    },
+  },
+  indicatorDot: {
+    height: '10px',
+    width: '10px',
+    borderRadius: '50%',
+    margin: '0 5px',
+  },
+};
